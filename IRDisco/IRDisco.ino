@@ -10,10 +10,13 @@ int greenPin = 4;
 int bluePin = 5; 
 int buzzerPin = 9;
 
+unsigned int partitureIndex = 0;
 const int songLength = 74;
 unsigned int partiture[songLength] = {1046,250,1244,250,1400,250,1510,250,1400,250,1244,250,1046,250,0,500,932,125,1174,125,1046,250,0,500,780,250,525,250,0,250,1046,250,1244,250,1400,250,1510,250,1400,250,1244,250,1400,250,0,750,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,0,0};
 
 unsigned long previousMillis = 0;
+unsigned long previousMillisSong = 0;
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -25,11 +28,12 @@ void setup() {
   pinMode(buzzerPin,OUTPUT);
 }
 
-void song() {
-  for (int i = 0; i < songLength-1; i+=2) {
-    if (partiture[i] != 0) tone(buzzerPin,partiture[i]);
+void song(int currentMilis) {
+  if (currentMilis - previousMillisSong >= partiture[partitureIndex+1]) {
+    if (partiture[partitureIndex] != 0) tone(buzzerPin,partiture[partitureIndex]);
     else noTone(buzzerPin);
-    delay(partiture[i+1]);
+    partitureIndex += 2;
+    previousMillisSong = currentMilis;
   }
   return;
 }
@@ -45,8 +49,8 @@ void loop() {
   unsigned long currentMillis = millis();
   rgbColor();
   if (play) {
-    song();
-    play = false;
+    song(currentMillis);
+    if (partitureIndex == songLength) play = false;
   }
   
   if (disco && currentMillis - previousMillis >= 90) {
