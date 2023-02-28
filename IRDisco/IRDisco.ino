@@ -9,6 +9,9 @@ int redPin = 3;
 int greenPin = 4;
 int bluePin = 5; 
 int buzzerPin = 9;
+
+unsigned long previousMillis = 0;
+
 void setup() {
   // put your setup code here, to run once:
   IrReceiver.begin(IRPin, ENABLE_LED_FEEDBACK); 
@@ -107,18 +110,19 @@ void rgbColor() {
 }
 
 void loop() {
+  unsigned long currentMillis = millis();
   rgbColor();
   if (play) {
     song(buzzerPin);
     play = false;
   }
   
-  if (disco) {
+  if (disco && currentMillis - previousMillis >= 90) {
     for (int i = 0; i < 3; ++i) {
       RGBvalues[i] = !RGBvalues[i];
     }
     rgbColor();
-    delay(100);
+    previousMillis = currentMillis;
   }
 
   if (IrReceiver.decode()) {
