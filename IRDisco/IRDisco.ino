@@ -100,12 +100,14 @@ void song(int buzzer) {
 }
 
 void rgbColor() {
+  Serial.println(RGBvalues[0]);
   digitalWrite(redPin,RGBvalues[0]);
   digitalWrite(greenPin,RGBvalues[1]);
   digitalWrite(bluePin,RGBvalues[2]);
 }
 
 void loop() {
+  rgbColor();
   if (play) {
     song(buzzerPin);
     play = false;
@@ -116,6 +118,7 @@ void loop() {
       RGBvalues[i] = !RGBvalues[i];
     }
     rgbColor();
+    delay(100);
   }
 
   if (IrReceiver.decode()) {
@@ -125,17 +128,17 @@ void loop() {
     switch (command) {
       //1
       case 0xF30CFF00: 
-        RGBvalues[0] != RGBvalues[0];
+        RGBvalues[0] = !RGBvalues[0];
         rgbColor();
         break;
       //2  
       case 0xE718FF00:
-        RGBvalues[1] != RGBvalues[1];
+        RGBvalues[1] = !RGBvalues[1];
         rgbColor();
         break;
       //3
       case 0xA15EFF00:
-        RGBvalues[2] != RGBvalues[2];
+        RGBvalues[2] = !RGBvalues[2];
         rgbColor();
         break;
       //EQ
