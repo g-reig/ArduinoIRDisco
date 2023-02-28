@@ -10,6 +10,9 @@ int greenPin = 4;
 int bluePin = 5; 
 int buzzerPin = 9;
 
+const int songLength = 74;
+unsigned int partiture[songLength] = {1046,250,1244,250,1400,250,1510,250,1400,250,1244,250,1046,250,0,500,932,125,1174,125,1046,250,0,500,780,250,525,250,0,250,1046,250,1244,250,1400,250,1510,250,1400,250,1244,250,1400,250,0,750,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,1400,125,1244,125,1510,125,0,0};
+
 unsigned long previousMillis = 0;
 
 void setup() {
@@ -22,83 +25,12 @@ void setup() {
   pinMode(buzzerPin,OUTPUT);
 }
 
-void song(int buzzer) {
-  tone(buzzer, 1046); 
-  delay(250);
-  tone(buzzer, 1244); 
-  delay(250); 
-  tone(buzzer, 1400); 
-  delay(250); 
-  tone(buzzer, 1510); 
-  delay(250);
-  tone(buzzer, 1400); 
-  delay(250);
-  tone(buzzer, 1244); 
-  delay(250); 
-  tone(buzzer, 1046); 
-  delay(250); 
-  noTone(buzzer); 
-  delay(500); 
-  tone(buzzer, 932); 
-  delay(125);
-  tone(buzzer, 1174); 
-  delay(125); 
-  tone(buzzer, 1046); 
-  delay(250);
-  // end of first
-  noTone(buzzer); 
-  delay(500); 
-  tone(buzzer, 780); 
-  delay(250); 
-  tone(buzzer, 525); 
-  delay(250); 
-  noTone(buzzer); 
-  delay(250);
-  //secont part
-  tone(buzzer, 1046); 
-  delay(250);
-  tone(buzzer, 1244); 
-  delay(250); 
-  tone(buzzer, 1400); 
-  delay(250); 
-  tone(buzzer, 1510); 
-  delay(250);
-  tone(buzzer, 1400); 
-  delay(250);
-  tone(buzzer, 1244); 
-  delay(250);
-  tone(buzzer, 1400); 
-  delay(250);
-  noTone(buzzer); 
-  delay(750);
-  //fast part
-  tone(buzzer, 1510); 
-  delay(125);
-  tone(buzzer, 1400); 
-  delay(125);
-  tone(buzzer, 1244); 
-  delay(125);
-  tone(buzzer, 1510); 
-  delay(125);
-  tone(buzzer, 1400); 
-  delay(125);
-  tone(buzzer, 1244); 
-  delay(125);
-  tone(buzzer, 1510); 
-  delay(125);
-  tone(buzzer, 1400); 
-  delay(125);
-  tone(buzzer, 1244); 
-  delay(125);
-  tone(buzzer, 1510); 
-  delay(125);
-  tone(buzzer, 1400); 
-  delay(125);
-  tone(buzzer, 1244); 
-  delay(125);
-  tone(buzzer, 1510); 
-  delay(125);
-  noTone(buzzer); 
+void song() {
+  for (int i = 0; i < songLength-1; i+=2) {
+    if (partiture[i] != 0) tone(buzzerPin,partiture[i]);
+    else noTone(buzzerPin);
+    delay(partiture[i+1]);
+  }
   return;
 }
 
@@ -113,7 +45,7 @@ void loop() {
   unsigned long currentMillis = millis();
   rgbColor();
   if (play) {
-    song(buzzerPin);
+    song();
     play = false;
   }
   
