@@ -1,16 +1,22 @@
 #include <IRremote.hpp>
 
 bool play = false;
-bool values[3] = {false,false,false};
+bool RGBvalues[3] = {false,false,false};
+
 bool disco = false;
+int IRPin = 2;
+int redPin = 3;
+int greenPin = 4;
+int bluePin = 5; 
+int buzzerPin = 9;
 void setup() {
   // put your setup code here, to run once:
-  IrReceiver.begin(2, ENABLE_LED_FEEDBACK); 
+  IrReceiver.begin(IRPin, ENABLE_LED_FEEDBACK); 
   Serial.begin(9600);
-  pinMode(3,OUTPUT);
-  pinMode(4,OUTPUT);
-  pinMode(5,OUTPUT);
-  pinMode(9,OUTPUT);
+  pinMode(redPin,OUTPUT);
+  pinMode(greenPin,OUTPUT);
+  pinMode(bluePin,OUTPUT);
+  pinMode(buzzerPin,OUTPUT);
 }
 
 void song(int buzzer) {
@@ -93,19 +99,25 @@ void song(int buzzer) {
   return;
 }
 
+void rgbColor() {
+  digitalWrite(redPin,RGBvalues[0]);
+  digitalWrite(greenPin,RGBvalues[1]);
+  digitalWrite(bluePin,RGBvalues[2]);
+}
+
 void loop() {
   if (play) {
-    song(9);
+    song(buzzerPin);
     play = false;
   }
   
   if (disco) {
     for (int i = 0; i < 3; ++i) {
-      digitalWrite(3+i,values[i]);
-      values[i] = !values[i];
+      RGBvalues[i] = !RGBvalues[i];
     }
-    delay(100);
+    rgbColor();
   }
+
   if (IrReceiver.decode()) {
     Serial.println(IrReceiver.decodedIRData.decodedRawData,HEX);
     auto command = IrReceiver.decodedIRData.decodedRawData;
@@ -113,21 +125,18 @@ void loop() {
     switch (command) {
       //1
       case 0xF30CFF00: 
-        digitalWrite(3,values[0]);
-        if (values[0] == false) values[0] = true;
-        else values[0] = false;
+        RGBvalues[0] != RGBvalues[0];
+        rgbColor();
         break;
       //2  
       case 0xE718FF00:
-        digitalWrite(4,values[1]);
-        if (values[1] == false) values[1] = true;
-        else values[1] = false;
+        RGBvalues[1] != RGBvalues[1];
+        rgbColor();
         break;
       //3
       case 0xA15EFF00:
-        digitalWrite(5,values[2]);
-        if (values[2] == false) values[2] = true;
-        else values[2] = false;
+        RGBvalues[2] != RGBvalues[2];
+        rgbColor();
         break;
       //EQ
       case 0xE619FF00:
